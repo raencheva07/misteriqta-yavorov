@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Мистерията Яворов</title>
+<style>
+:root{
+  --bg:#f4efe7; --bg2:#e8dbc8; --card:#fffaf3; --ink:#2e241d; --muted:#6f5f52;
+  --accent:#7b593c; --accent2:#5d4029; --line:#d7c4af; --shadow:0 10px 30px rgba(45,31,18,.10);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Georgia,serif;background:linear-gradient(180deg,var(--bg2),var(--bg));color:var(--ink)}
+header{padding:56px 20px;text-align:center;background:#e9ddcc;border-bottom:1px solid var(--line)}
+h1{font-size:48px;margin:0;color:var(--accent2)}
+.subtitle{max-width:760px;margin:12px auto 0;color:var(--muted);line-height:1.7}
+.container{max-width:1100px;margin:auto;padding:28px 18px 48px}
+.card{background:var(--card);padding:22px;border-radius:18px;margin-bottom:20px;border:1px solid var(--line);box-shadow:var(--shadow)}
+h2{margin-top:0;color:var(--accent2)}
+video{width:100%;border-radius:14px;background:#000}
+button.primary{padding:12px 16px;border:none;border-radius:10px;background:var(--accent);color:#fff;font-size:16px;cursor:pointer}
+input{padding:12px 14px;border-radius:12px;border:1px solid var(--line);font-size:16px;font-family:inherit;width:100%}
+.player-row{display:grid;grid-template-columns:1fr auto;gap:10px;max-width:560px}
+#players{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px}
+.pill{padding:9px 12px;background:#fff;border:1px solid var(--line);border-radius:999px}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.cardbtn{width:100%;padding:16px;border-radius:14px;border:1px solid var(--line);background:#fff;color:var(--accent2);text-align:left;cursor:pointer;font-size:16px;font-family:inherit}
+.cardbtn:hover{background:#fcf6ee}
+.answer{display:none;margin-top:10px;background:#fff;padding:14px;border:1px dashed var(--line);border-radius:12px;line-height:1.6}
+.small{color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Мистерията Яворов</h1>
+  <p class="subtitle">Образователно въведение към настолната игра. Сложи своето видео като <strong>video.mp4</strong> в същата папка и след края му сайтът ще превърти надолу към подготовката на играта.</p>
+</header>
+
+<div class="container">
+  <div class="card">
+    <h2>Видео</h2>
+    <video id="introVideo" controls preload="auto">
+      <source src="video.mp4" type="video/mp4">
+    </video>
+    <p class="small">След края на видеото сайтът автоматично ще премине към следващата секция.</p>
+  </div>
+
+  <div class="card" id="playersSection">
+    <h2>Въвеждане на играчи</h2>
+    <div class="player-row">
+      <input id="playerName" placeholder="Име на играч">
+      <button class="primary" onclick="addPlayer()">Добави</button>
+    </div>
+    <div id="players"></div>
+  </div>
+
+  <div class="card">
+    <h2>Карти „Печелиш или губиш“</h2>
+    <p class="small">Натисни върху карта, за да видиш въпроса, верния отговор и какво печелиш или губиш.</p>
+    <div class="cards-grid" id="cardsGrid"></div>
+  </div>
+</div>
+
+<script>
+const cards = [{"n": 1, "q": "Какво литературно направление е силно свързано с поезията на Яворов?", "opts": "A) Реализъм | Б) Символизъм | В) Романтизъм", "a": "Б) Символизъм", "ok": "Получаваш 15 000 княжески лева", "bad": "Плащаш 5 000 княжески лева"}, {"n": 2, "q": "Как се казва първата голяма любов на Яворов?", "opts": "", "a": "Мина Тодорова", "ok": "Получаваш 15 000 княжески лева", "bad": "Плащаш 10 000 княжески лева"}, {"n": 3, "q": "Кой български поет е съпруг на Лора Каравелова?", "opts": "", "a": "Пейо Яворов", "ok": "Освобождаваш се от Тъмница", "bad": "Оставаш 1 ход на място"}, {"n": 4, "q": "Назови едно произведение на Пейо Яворов.", "opts": "", "a": "Примерни верни отговори: „Градушка“, „Арменци“, „Две хубави очи“, „Нощ“, „На Лора“, „Безсъници“.", "ok": "Получаваш 10 000 княжески лева", "bad": "Плащаш 10 000 княжески лева"}, {"n": 5, "q": "Коя известна българска общественичка е майка на Лора Каравелова?", "opts": "", "a": "Екатерина Каравелова", "ok": "Получаваш 15 000 княжески лева", "bad": "Плащаш 10 000 княжески лева"}, {"n": 6, "q": "В кое столетие живее Пейо Яворов?", "opts": "A) XIX–XX век | Б) XVIII век | В) XXI век", "a": "А) XIX–XX век", "ok": "Получаваш 10 000 княжески лева", "bad": "Плащаш 10 000 княжески лева"}, {"n": 7, "q": "В кое литературно списание публикува Яворов заедно с българските символисти?", "opts": "A) Мисъл | Б) Златорог | В) Български преглед", "a": "А) Мисъл", "ok": "Получаваш 10 000 княжески лева", "bad": "Плащаш 10 000 княжески лева"}, {"n": 8, "q": "Кой български писател е водеща фигура в кръга „Мисъл“?", "opts": "A) Иван Вазов | Б) Пенчо Славейков | В) Елин Пелин", "a": "Б) Пенчо Славейков", "ok": "Получаваш 10 000 княжески лева", "bad": "Пропускаш 1 ход"}, {"n": 9, "q": "В кой град е роден Пейо Яворов?", "opts": "A) София | Б) Чирпан | В) Пловдив", "a": "Б) Чирпан", "ok": "Получаваш 10 000 княжески лева", "bad": "Плащаш 10 000 княжески лева"}, {"n": 10, "q": "Как се казва известната любовна поема на Яворов, посветена на Мина?", "opts": "A) Две хубави очи | Б) Нощ | В) Ще бъдеш в бяло", "a": "А) Две хубави очи", "ok": "Получаваш 5 000 княжески лева", "bad": "Пропускаш 1 ход"}, {"n": 11, "q": "В коя революционна организация участва Яворов?", "opts": "A) БЗНС | Б) ВМОРО | В) БРЦК", "a": "Б) ВМОРО", "ok": "Теглиш 10 000 княжески лева", "bad": "Плащаш 10 000 княжески лева"}, {"n": 12, "q": "Кой е бащата на Лора Каравелова?", "opts": "A) Любен Каравелов | Б) Петко Каравелов | В) Тодор Каблешков", "a": "Б) Петко Каравелов", "ok": "Получаваш 5 000 княжески лева", "bad": "Пропускаш 1 ход"}, {"n": 13, "q": "Какво образование получава Лора Каравелова?", "opts": "A) Право | Б) Литература | В) Музика", "a": "В) Музика", "ok": "Получаваш 10 000 княжески лева", "bad": "Пропускаш 1 ход"}, {"n": 14, "q": "Кой български интелектуалец създава литературния кръг „Мисъл“?", "opts": "A) Пенчо Славейков | Б) Д-р Кръстьо Кръстев | В) Иван Вазов", "a": "Б) Д-р Кръстьо Кръстев", "ok": "Получаваш 15 000 княжески лева", "bad": "Плащаш 10 000 княжески лева"}, {"n": 15, "q": "Каква е професията на бащата на Лора?", "opts": "A) Генерал | Б) Министър-председател | В) Академик", "a": "Б) Министър-председател", "ok": "Получаваш 15 000 княжески лева", "bad": "Плащаш 10 000 княжески лева"}, {"n": 16, "q": "Кое от следните произведения НЕ е на Яворов?", "opts": "A) „Градушка“ | Б) „Арменци“ | В) „Железният светилник“", "a": "В) „Железният светилник“ (то е на Димитър Талев)", "ok": "Получаваш 5 000 княжески лева", "bad": "Плащаш 10 000 княжески лева"}, {"n": 17, "q": "Кой от следните писатели НЕ е част от кръга „Мисъл“?", "opts": "A) Пенчо Славейков | Б) Пейо Яворов | В) Иван Вазов", "a": "В) Иван Вазов", "ok": "Получаваш 10 000 княжески лева", "bad": "Плащаш 10 000 княжески лева"}, {"n": 18, "q": "В кой град се развива голяма част от живота на Яворов?", "opts": "A) София | Б) Варна | В) Пловдив", "a": "А) София", "ok": "Получаваш 10 000 княжески лева", "bad": "Плащаш 10 000 княжески лева"}, {"n": 19, "q": "В коя година е роден Яворов?", "opts": "", "a": "1878", "ok": "Получаваш 20 000 княжески лева", "bad": "Плащаш 10 000 княжески лева"}, {"n": 20, "q": "Коя година умира Яворов?", "opts": "", "a": "1914", "ok": "Получаваш 20 000 княжески лева", "bad": "Плащаш 10 000 княжески лева"}, {"n": 21, "q": "Кой литературен стил е противоположен на символизма?", "opts": "", "a": "Реализъм", "ok": "Получаваш 20 000 княжески лева", "bad": "Плащаш 10 000 княжески лева"}, {"n": 22, "q": "Как е истинското фамилно име на поета Пейо Яворов?", "opts": "", "a": "Крачолов", "ok": "Получаваш 20 000 княжески лева", "bad": "Плащаш 10 000 княжески лева"}, {"n": 23, "q": "Кой е легендарният войвода, с когото Яворов действа в Македония?", "opts": "", "a": "Гоце Делчев", "ok": "Получаваш 25 000 княжески лева", "bad": "Плащаш 10 000 княжески лева"}, {"n": 24, "q": "Кое събитие в живота на Яворов предизвиква огромен обществен скандал?", "opts": "", "a": "Смъртта на Лора Каравелова", "ok": "Получаваш 20 000 княжески лева", "bad": "Плащаш 20 000 княжески лева"}];
+
+function toggle(id){
+  const el = document.getElementById(id);
+  el.style.display = el.style.display === "block" ? "none" : "block";
+}
+
+function addPlayer(){
+  const input = document.getElementById("playerName");
+  const name = input.value.trim();
+  if(!name) return;
+  const div = document.createElement("div");
+  div.className = "pill";
+  div.textContent = name;
+  document.getElementById("players").appendChild(div);
+  input.value = "";
+}
+
+document.getElementById("playerName").addEventListener("keydown", function(e){
+  if(e.key === "Enter") addPlayer();
+});
+
+const grid = document.getElementById("cardsGrid");
+cards.forEach(c => {
+  const wrap = document.createElement("div");
+  wrap.innerHTML = `
+    <button class="cardbtn" onclick="toggle('ans${c.n}')"><strong>Карта №${c.n}</strong><br>${c.q}</button>
+    <div class="answer" id="ans${c.n}">
+      ${c.opts ? `<div><strong>Опции:</strong> ${c.opts}</div>` : ""}
+      <div><strong>Отговор:</strong> ${c.a}</div>
+      <div><strong>Правилен:</strong> ${c.ok}</div>
+      <div><strong>Грешен:</strong> ${c.bad}</div>
+    </div>
+  `;
+  grid.appendChild(wrap);
+});
+
+document.getElementById("introVideo").addEventListener("ended", () => {
+  document.getElementById("playersSection").scrollIntoView({behavior:"smooth"});
+});
+</script>
+</body>
+</html>
