@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Тайната на Яворов | Образователна игра</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body class="theme-dark">
+  <div class="noise"></div>
+  <header class="hero">
+    <nav class="nav container">
+      <div class="brand">
+        <span class="brand-mark">Я</span>
+        <div>
+          <strong>Тайната на Яворов</strong>
+          <small>образователна игра</small>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a href="rules.html">Правила</a>
+        <a href="players.html">Играчите</a>
+      </div>
+    </nav>
+
+    <section class="hero-content container">
+      <div class="hero-copy reveal">
+        <p class="eyebrow">Литература • История • Разследване</p>
+        <h1>Влез в историята на Яворов, Лора и една нощ, която остава загадка.</h1>
+        <p class="lead">
+          Изгледай краткото образователно видео, за да се запознаеш с героите,
+          контекста и напрежението около случая. След края му ще преминеш към
+          страницата за въвеждане на играчите.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#video-section">Гледай видеото</a>
+          <a class="btn btn-secondary" href="rules.html">Прочети правилата</a>
+        </div>
+      </div>
+
+      <div class="hero-card reveal-delay">
+        <div class="quote-card">
+          <span class="quote-mark">“</span>
+          <p>
+            Любов, ревност, обществен натиск и една трагедия, която повече от век
+            не спира да поражда въпроси.
+          </p>
+          <div class="quote-footer">Образователен модул към играта</div>
+        </div>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <section id="video-section" class="section container">
+      <div class="section-heading reveal">
+        <p class="eyebrow">Стъпка 1</p>
+        <h2>Образователно видео</h2>
+        <p>
+          Замени файла <code>assets/video/yavorov-intro.mp4</code> със своето готово видео.
+          След като то приключи, сайтът автоматично ще отвори страницата за играчите.
+        </p>
+      </div>
+
+      <div class="video-shell reveal-delay">
+        <div class="video-badge">Задължително преди игра</div>
+        <video id="introVideo" class="intro-video" controls preload="metadata" poster="">
+          <source src="assets/video/yavorov-intro.mp4" type="video/mp4" />
+          Вашият браузър не поддържа видео елемент.
+        </video>
+        <div id="videoFallback" class="video-fallback hidden">
+          <h3>Липсва видео файл</h3>
+          <p>
+            Добави своето видео в папка <strong>assets/video</strong> с име
+            <strong>yavorov-intro.mp4</strong>.
+          </p>
+          <a class="btn btn-primary" href="players.html">Продължи към играчите</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container grid-3">
+      <article class="info-card reveal">
+        <p class="card-kicker">Героите</p>
+        <h3>Яворов, Лора, Екатерина, Дора и Мина</h3>
+        <p>Видео въведението представя ключовите фигури и връзките между тях.</p>
+      </article>
+      <article class="info-card reveal-delay">
+        <p class="card-kicker">Казусът</p>
+        <h3>История, превърната в загадка</h3>
+        <p>Сюжетът подготвя играчите за разследване, без да разкрива решението.</p>
+      </article>
+      <article class="info-card reveal-more">
+        <p class="card-kicker">Играта</p>
+        <h3>Улики, писма и стратегически избори</h3>
+        <p>След видеото участниците въвеждат имената си и започват играта.</p>
+      </article>
+    </section>
+  </main>
+
+  <footer class="footer container">
+    <p>Проект по литература • „Тайната на Яворов“</p>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
